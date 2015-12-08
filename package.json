@@ -1,0 +1,33 @@
+{
+  "name": "adios",
+  "version": "1.0.0",
+  "description": "A simple module for handling shutdowns within a clustered application.",
+  "main": "lib/adios.js",
+  "scripts": {
+    "test": "gulp test",
+    "lint": "gulp lint"
+  },
+  "keywords": [
+    "shutdown",
+    "cluster"
+  ],
+  "author": "Elliott Foster <elliottf@codebrews.com> (http://codebrews.com/)",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 0.12.4"
+  },
+  "devDependencies": {
+    "ghooks": "^1.0.1",
+    "gulp": "^3.9.0",
+    "gulp-coveralls": "^0.1.4",
+    "gulp-eslint": "^1.1.1",
+    "gulp-istanbul": "^0.10.3",
+    "gulp-nodeunit": "0.0.5"
+  },
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm run lint",
+      "pre-push": "npm test"
+    }
+  }
+}
