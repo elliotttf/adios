@@ -22,9 +22,11 @@
     "gulp-coveralls": "^0.1.4",
     "gulp-eslint": "^1.1.1",
     "gulp-istanbul": "^0.10.3",
-    "gulp-nodeunit": "0.0.5"
+    "gulp-nodeunit": "0.0.5",
+    "sinon": "^1.17.2"
   },
   "config": {
+    "defaultPort": 3993,
     "ghooks": {
       "pre-commit": "npm run lint",
       "pre-push": "npm test"
