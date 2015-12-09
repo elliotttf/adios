@@ -26,10 +26,13 @@
     "sinon": "^1.17.2"
   },
   "config": {
-    "defaultPort": 3993,
+    "defaultPath": "/tmp/adios.sock",
     "ghooks": {
       "pre-commit": "npm run lint",
       "pre-push": "npm test"
     }
+  },
+  "engines": {
+    "node": ">= 4.2"
   }
 }

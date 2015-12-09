@@ -1,21 +1,19 @@
-var child = require('child_process');
-var cluster = require('cluster');
-var Adios = require('../');
+'use strict';
+const cluster = require('cluster');
+const Adios = require('../');
 
 module.exports = {
-  setUp: function (cb) {
+  setUp(cb) {
     this.stubs = [];
     this.origMaster = cluster.isMaster;
     cb();
   },
-  tearDown: function (cb) {
-    this.stubs.forEach(function (stub) {
-      stub.restore();
-    });
+  tearDown(cb) {
+    this.stubs.forEach(stub => stub.restore());
     cluster.isMaster = this.origMaster;
     Adios.child.destroy();
-    Adios.master.destroy();
-    cb();
+    Adios.master.destroy()
+      .then(cb);
   },
   master: require('./master'),
   child: require('./child')
