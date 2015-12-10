@@ -7,6 +7,10 @@
     "test": "gulp test",
     "lint": "gulp lint"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/elliotttf/express-versioned-routes"
+  },
   "keywords": [
     "shutdown",
     "cluster"
