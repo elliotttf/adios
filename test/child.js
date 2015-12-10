@@ -4,8 +4,6 @@ const net = require('net');
 const sinon = require('sinon');
 const Adios = require('../');
 
-const DEFAULT_PATH = require('../package.json').config.defaultPath;
-
 module.exports = {
   tearDown(cb) {
     if (this.server) {
@@ -17,7 +15,7 @@ module.exports = {
   },
   fail: {
     setUp(cb) {
-      Adios.master.init().then(cb);
+      Adios.master.init(this.testSock).then(cb);
       cluster.isMaster = false;
     },
     withoutMaster(test) {
@@ -54,7 +52,7 @@ module.exports = {
       test.expect(2);
 
       test.doesNotThrow(() => {
-        Adios.child.init(console.log);
+        Adios.child.init(console.log, this.testSock);
       }, 'Child not initialized.');
 
       test.throws(() => {
@@ -75,9 +73,9 @@ module.exports = {
           test.done();
         });
       });
-      this.server.listen(DEFAULT_PATH, () => {
+      this.server.listen(this.testSock, () => {
         cluster.isMaster = false;
-        Adios.child.init(console.log);
+        Adios.child.init(console.log, this.testSock);
       });
     },
     sigint(test) {
@@ -89,12 +87,12 @@ module.exports = {
       }));
 
       this.server = net.createServer(c => c.write('SIGINT'));
-      this.server.listen(DEFAULT_PATH, () => {
+      this.server.listen(this.testSock, () => {
         cluster.isMaster = false;
         Adios.child.init(() => {
           test.ok(true, 'Executed clean callback.');
           return Promise.resolve();
-        });
+        }, this.testSock);
       });
     }
   }
