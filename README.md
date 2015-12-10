@@ -40,3 +40,22 @@ else {
     });
 }
 ```
+
+## API
+
+* `Adios.master.init([path])` - The initialize function for adios masters. Sets
+  up a server for IPC with clustered workers. Note: there can be only one.
+  * `path` - (optional) The socket path to use. Defaults to /var/run/adios.sock
+
+  Returns a promise that resolves when the server is listening.
+
+* `Adios.child.init(cleanCb[, path])- The initialize function for adios
+  children. Sets up a connection to the master. Note: there can be only one per
+  process and it mist be running on a child process.
+   * `cleanCb` - The method to execute when the master is notifying of a
+     shutdown. Must return a promise that resolves when work is done.
+   * `path` - (optional) The socket path to use. Defaults to /var/run/adios.sock
+
+   Returns a promise that resolves when the connection with the master has been
+   established.
+
