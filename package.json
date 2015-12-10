@@ -1,6 +1,6 @@
 {
   "name": "adios",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple module for handling shutdowns within a clustered application.",
   "main": "lib/adios.js",
   "scripts": {
@@ -18,7 +18,7 @@
   "author": "Elliott Foster <elliottf@codebrews.com> (http://codebrews.com/)",
   "license": "MIT",
   "engines": {
-    "node": ">= 0.12.4"
+    "node": ">= 4.2"
   },
   "devDependencies": {
     "ghooks": "^1.0.1",
@@ -35,8 +35,5 @@
       "pre-commit": "npm run lint",
       "pre-push": "npm test"
     }
-  },
-  "engines": {
-    "node": ">= 4.2"
   }
 }
