@@ -8,9 +8,10 @@ const Adios = require('../');
 module.exports = {
   setUp(cb) {
     this.stubs = [];
+    this.testSock = path.join(os.tmpDir(), `${Date.now()}-adios.sock`);
+
     this.clock = sinon.useFakeTimers();
     this.origMaster = cluster.isMaster;
-    this.testSock = path.join(os.tmpDir(), `${Date.now()}-adios.sock`);
     cb();
   },
   tearDown(cb) {

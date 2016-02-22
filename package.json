@@ -1,11 +1,13 @@
 {
   "name": "adios",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A simple module for handling shutdowns within a clustered application.",
   "main": "lib/adios.js",
   "scripts": {
-    "test": "gulp test",
-    "lint": "gulp lint"
+    "test": "istanbul cover --print both nodeunit ./test/index.js",
+    "lint": "eslint .",
+    "coverage": "istanbul check-coverage --statements 100 --lines 100 --branches 81 --functions 100",
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -21,12 +23,11 @@
     "node": ">= 4.2"
   },
   "devDependencies": {
+    "coveralls": "^2.11.6",
+    "eslint": "^2.2.0",
     "ghooks": "^1.0.1",
-    "gulp": "^3.9.0",
-    "gulp-coveralls": "^0.1.4",
-    "gulp-eslint": "^1.1.1",
-    "gulp-istanbul": "^0.10.3",
-    "gulp-nodeunit": "0.0.5",
+    "istanbul": "^0.4.2",
+    "nodeunit": "^0.9.1",
     "sinon": "^1.17.2"
   },
   "config": {
