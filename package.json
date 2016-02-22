@@ -1,6 +1,6 @@
 {
   "name": "adios",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A simple module for handling shutdowns within a clustered application.",
   "main": "lib/adios.js",
   "scripts": {
