@@ -46,6 +46,10 @@ else {
 * `Adios.master.init([path])` - The initialize function for adios masters. Sets
   up a server for IPC with clustered workers. Note: there can be only one.
   * `path` - (optional) The socket path to use. Defaults to /var/run/adios.sock
+  * `config` - (optional) A configuration object for the master process.
+    Contains:
+   * timeout: time in milliseconds before a child will be force closed.
+     Default: 10000, 10 seconds.
 
   Returns a promise that resolves when the server is listening.
 
