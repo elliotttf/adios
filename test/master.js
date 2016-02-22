@@ -135,14 +135,14 @@ module.exports = {
       util.inherits(DummyWorker, EventEmitter);
       DummyWorker.prototype.disconnect = function () {
         test.ok(true, 'Disconnect called');
-        this.clock.tick(10000);
+        this.clock.tick(1);
       }.bind(this);
       DummyWorker.prototype.kill = function () {
         test.ok(true, 'Kill called');
       };
       cluster.workers.foo = new DummyWorker();
 
-      Adios.master.init(this.testSock)
+      Adios.master.init(this.testSock, {timeout: 1})
         .then(() => {
           let conn = net.connect(this.testSock, () => {
             conn.write('pid:foo', () => {
