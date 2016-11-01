@@ -1,8 +1,8 @@
 'use strict';
+
 const cluster = require('cluster');
 const net = require('net');
 const sinon = require('sinon');
-const util = require('util');
 const Adios = require('../');
 const EventEmitter = require('events');
 
@@ -38,7 +38,7 @@ module.exports = {
     childFail(test) {
       test.expect(1);
 
-      sinon.stub(net.Server.prototype, 'close', function (cb) {
+      sinon.stub(net.Server.prototype, 'close', function close(cb) {
         test.throws(() => {
           cb();
         }, 'Exception not thrown');
@@ -53,7 +53,7 @@ module.exports = {
           cluster.workers.foo = {};
           process.kill(process.pid, 'SIGINT');
         });
-    }
+    },
   },
   comm: {
     end(test) {
@@ -61,19 +61,19 @@ module.exports = {
 
       Adios.master.init(this.testSock)
         .then(() => {
-          let conn = net.connect(this.testSock, () => {
+          const conn = net.connect(this.testSock, () => {
             conn.end();
             test.ok(true);
             test.done();
           });
         });
-    }
+    },
   },
   sigint: {
     noWorkers(test) {
       test.expect(1);
 
-      this.stubs.push(sinon.stub(process, 'exit', code => {
+      this.stubs.push(sinon.stub(process, 'exit', (code) => {
         test.equal(0, code, 'Process did not termincate cleanly');
         test.done();
       }));
@@ -86,26 +86,30 @@ module.exports = {
     workerShutdown(test) {
       test.expect(3);
 
-      this.stubs.push(sinon.stub(process, 'exit', code => {
+      this.stubs.push(sinon.stub(process, 'exit', (code) => {
         delete cluster.workers.foo;
         test.equal(0, code, 'Process did not termincate cleanly');
         test.done();
       }));
 
-      var DummyWorker = function () {
-        this.process = {pid: 'foo'};
-        EventEmitter.call(this);
-      };
-      util.inherits(DummyWorker, EventEmitter);
-      DummyWorker.prototype.disconnect = function () {
-        test.ok(true, 'Disconnect called');
-        this.emit('disconnect');
-      };
+      class DummyWorker extends EventEmitter {
+        constructor() {
+          super();
+          this.process = { pid: 'foo' };
+          EventEmitter.call(this);
+        }
+
+        disconnect() {
+          test.ok(true, 'Disconnect called');
+          this.emit('disconnect');
+        }
+      }
+
       cluster.workers.foo = new DummyWorker();
 
       Adios.master.init(this.testSock)
         .then(() => {
-          let conn = net.connect(this.testSock, () => {
+          const conn = net.connect(this.testSock, () => {
             conn.write('pid:foo', () => {
               this.clock.restore();
               setTimeout(() => {
@@ -114,69 +118,80 @@ module.exports = {
               }, 10);
             });
           });
-          conn.on('data', msg => {
+          conn.on('data', (msg) => {
             test.equal('SIGINT', msg.toString(), 'SIGINT not announced.');
           });
         });
     },
     workerTimeout(test) {
       test.expect(3);
+      let clock = this.clock;
 
-      this.stubs.push(sinon.stub(process, 'exit', code => {
+      this.stubs.push(sinon.stub(process, 'exit', (code) => {
         delete cluster.workers.foo;
         test.equal(0, code, 'Process did not termincate cleanly');
         test.done();
       }));
 
-      var DummyWorker = function () {
-        this.process = {pid: 'foo'};
-        EventEmitter.call(this);
-      };
-      util.inherits(DummyWorker, EventEmitter);
-      DummyWorker.prototype.disconnect = function () {
-        test.ok(true, 'Disconnect called');
-        this.clock.tick(1);
-      }.bind(this);
-      DummyWorker.prototype.kill = function () {
-        test.ok(true, 'Kill called');
-      };
+      class DummyWorker extends EventEmitter {
+        constructor() {
+          super();
+          this.process = { pid: 'foo' };
+          EventEmitter.call(this);
+        }
+
+        disconnect() {
+          test.ok(true, 'Disconnect called');
+          clock.tick(1);
+        }
+
+        kill() {
+          test.ok(true, 'Kill called');
+        }
+      }
+
       cluster.workers.foo = new DummyWorker();
 
-      Adios.master.init(this.testSock, {timeout: 1})
+      Adios.master.init(this.testSock, { timeout: 1 })
         .then(() => {
-          let conn = net.connect(this.testSock, () => {
+          const conn = net.connect(this.testSock, () => {
             conn.write('pid:foo', () => {
               this.clock.restore();
               setTimeout(() => {
                 this.clock = sinon.useFakeTimers();
+                clock = this.clock;
                 process.kill(process.pid, 'SIGINT');
               }, 10);
             });
           });
         });
-    }
+    },
   },
   sigterm(test) {
     test.expect(2);
 
-    this.stubs.push(sinon.stub(process, 'exit', code => {
+    this.stubs.push(sinon.stub(process, 'exit', (code) => {
       test.equal(0, code, 'Process did not termincate cleanly');
       test.done();
     }));
 
-    var DummyWorker = function () {
-      this.process = {pid: 'foo'};
-      EventEmitter.call(this);
-    };
-    util.inherits(DummyWorker, EventEmitter);
-    DummyWorker.prototype.kill = function () {
-      test.ok(true, 'Kill called');
-    };
+    class DummyWorker extends EventEmitter {
+      constructor() {
+        super();
+        this.process = { pid: 'foo' };
+        EventEmitter.call(this);
+      }
+
+      kill() {
+        test.ok(true, 'Kill called');
+      }
+    }
+
     cluster.workers.foo = new DummyWorker();
     Adios.master.init(this.testSock)
       .then(() => {
         process.kill(process.pid, 'SIGTERM');
       });
-  }
+  },
 };
 

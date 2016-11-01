@@ -1,0 +1,9 @@
+{
+  "rules": {
+    "class-methods-use-this": "off",
+    "global-require": "off",
+    "require-jsdoc": "off",
+    "import/no-extraneous-dependencies": "off"
+  }
+}
+

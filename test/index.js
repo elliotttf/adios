@@ -1,4 +1,5 @@
 'use strict';
+
 const cluster = require('cluster');
 const os = require('os');
 const path = require('path');
@@ -25,6 +26,6 @@ module.exports = {
       });
   },
   master: require('./master'),
-  child: require('./child')
+  child: require('./child'),
 };
 
