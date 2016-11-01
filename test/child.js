@@ -1,8 +1,16 @@
 'use strict';
+
 const cluster = require('cluster');
 const net = require('net');
 const sinon = require('sinon');
 const Adios = require('../');
+
+/**
+ * Noop
+ * @return {undefined}
+ */
+function noop() {
+}
 
 module.exports = {
   tearDown(cb) {
@@ -22,7 +30,7 @@ module.exports = {
       test.expect(1);
       Adios.master.destroy();
 
-      Adios.child.init(console.log)
+      Adios.child.init(noop)
         .then(test.done)
         .catch(() => {
           test.ok(true, 'Error connecting caught.');
@@ -52,22 +60,22 @@ module.exports = {
       test.expect(2);
 
       test.doesNotThrow(() => {
-        Adios.child.init(console.log, this.testSock);
+        Adios.child.init(noop, this.testSock);
       }, 'Child not initialized.');
 
       test.throws(() => {
-        Adios.child.init(console.log);
+        Adios.child.init(noop);
       }, 'Child initialized twice.');
 
       test.done();
-    }
+    },
   },
   comm: {
     announcePid(test) {
       test.expect(1);
 
-      this.server = net.createServer(c => {
-        c.on('data', msg => {
+      this.server = net.createServer((c) => {
+        c.on('data', (msg) => {
           Adios.child.destroy();
           test.equal(msg.toString().indexOf('pid:'), 0, 'Pid not announced.');
           test.done();
@@ -75,13 +83,13 @@ module.exports = {
       });
       this.server.listen(this.testSock, () => {
         cluster.isMaster = false;
-        Adios.child.init(console.log, this.testSock);
+        Adios.child.init(noop, this.testSock);
       });
     },
     sigint(test) {
       test.expect(2);
 
-      this.stubs.push(sinon.stub(process, 'exit', code => {
+      this.stubs.push(sinon.stub(process, 'exit', (code) => {
         test.equal(0, code, 'Process did not exit cleanly.');
         test.done();
       }));
@@ -94,7 +102,7 @@ module.exports = {
           return Promise.resolve();
         }, this.testSock);
       });
-    }
-  }
+    },
+  },
 };
 

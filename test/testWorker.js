@@ -1,7 +1,8 @@
 'use strict';
+
 const Adios = require('../');
 
-Adios.child.init(() => {
-  return Promise.resolve();
-}, process.env.testSock);
+Adios.child.init(() =>
+   Promise.resolve()
+, process.env.testSock);
 

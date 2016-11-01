@@ -1,13 +1,13 @@
 {
   "name": "adios",
-  "version": "1.1.1",
   "description": "A simple module for handling shutdowns within a clustered application.",
   "main": "lib/adios.js",
   "scripts": {
     "test": "istanbul cover --print both nodeunit ./test/index.js",
     "lint": "eslint .",
     "coverage": "istanbul check-coverage --statements 100 --lines 100 --branches 81 --functions 100",
-    "coveralls": "cat ./coverage/lcov.info | coveralls"
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
     "type": "git",
@@ -20,15 +20,18 @@
   "author": "Elliott Foster <elliottf@codebrews.com> (http://codebrews.com/)",
   "license": "MIT",
   "engines": {
-    "node": ">= 4.2"
+    "node": ">= 6"
   },
   "devDependencies": {
     "coveralls": "^2.11.6",
-    "eslint": "^2.2.0",
+    "eslint": "^3.9.1",
+    "eslint-config-airbnb-base": "^9.0.0",
+    "eslint-plugin-import": "^2.0.0",
     "ghooks": "^1.0.1",
     "istanbul": "^0.4.2",
     "nodeunit": "^0.9.1",
-    "sinon": "^1.17.2"
+    "sinon": "^1.17.2",
+    "semantic-release": "^4.3.5"
   },
   "config": {
     "defaultPath": "/var/run/adios.sock",
