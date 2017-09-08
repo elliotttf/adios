@@ -24,14 +24,14 @@
   },
   "devDependencies": {
     "coveralls": "^2.11.6",
-    "eslint": "^3.9.1",
-    "eslint-config-airbnb-base": "^9.0.0",
+    "eslint": "^4.4.1",
+    "eslint-config-airbnb-base": "^11.3.1",
     "eslint-plugin-import": "^2.0.0",
-    "ghooks": "^1.0.1",
+    "ghooks": "^2.0.0",
     "istanbul": "^0.4.2",
-    "nodeunit": "^0.9.1",
-    "sinon": "^1.17.2",
-    "semantic-release": "^4.3.5"
+    "nodeunit": "^0.11.1",
+    "sinon": "^3.1.0",
+    "semantic-release": "^6.3.6"
   },
   "config": {
     "defaultPath": "/var/run/adios.sock",

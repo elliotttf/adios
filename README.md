@@ -1,5 +1,7 @@
 # Adios
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/elliotttf/adios.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/elliotttf/adios.svg?branch=master)](https://travis-ci.org/elliotttf/adios)
 [![Coverage Status](https://coveralls.io/repos/elliotttf/adios/badge.svg?branch=master&service=github)](https://coveralls.io/github/elliotttf/adios?branch=master)
 

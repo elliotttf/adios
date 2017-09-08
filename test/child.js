@@ -89,7 +89,7 @@ module.exports = {
     sigint(test) {
       test.expect(2);
 
-      this.stubs.push(sinon.stub(process, 'exit', (code) => {
+      this.stubs.push(sinon.stub(process, 'exit').callsFake((code) => {
         test.equal(0, code, 'Process did not exit cleanly.');
         test.done();
       }));
@@ -105,4 +105,3 @@ module.exports = {
     },
   },
 };
-

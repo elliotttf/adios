@@ -38,7 +38,7 @@ module.exports = {
     childFail(test) {
       test.expect(1);
 
-      sinon.stub(net.Server.prototype, 'close', function close(cb) {
+      sinon.stub(net.Server.prototype, 'close').callsFake(function close(cb) {
         test.throws(() => {
           cb();
         }, 'Exception not thrown');
@@ -73,7 +73,7 @@ module.exports = {
     noWorkers(test) {
       test.expect(1);
 
-      this.stubs.push(sinon.stub(process, 'exit', (code) => {
+      this.stubs.push(sinon.stub(process, 'exit').callsFake((code) => {
         test.equal(0, code, 'Process did not termincate cleanly');
         test.done();
       }));
@@ -86,7 +86,7 @@ module.exports = {
     workerShutdown(test) {
       test.expect(3);
 
-      this.stubs.push(sinon.stub(process, 'exit', (code) => {
+      this.stubs.push(sinon.stub(process, 'exit').callsFake((code) => {
         delete cluster.workers.foo;
         test.equal(0, code, 'Process did not termincate cleanly');
         test.done();
@@ -127,7 +127,7 @@ module.exports = {
       test.expect(3);
       let clock = this.clock;
 
-      this.stubs.push(sinon.stub(process, 'exit', (code) => {
+      this.stubs.push(sinon.stub(process, 'exit').callsFake((code) => {
         delete cluster.workers.foo;
         test.equal(0, code, 'Process did not termincate cleanly');
         test.done();
@@ -170,7 +170,7 @@ module.exports = {
   sigterm(test) {
     test.expect(2);
 
-    this.stubs.push(sinon.stub(process, 'exit', (code) => {
+    this.stubs.push(sinon.stub(process, 'exit').callsFake((code) => {
       test.equal(0, code, 'Process did not termincate cleanly');
       test.done();
     }));
@@ -194,4 +194,3 @@ module.exports = {
       });
   },
 };
-
