@@ -40,5 +40,5 @@ jobs:
     -
       stage: release
       node_js: lts/carbon
-      sciprt:
+      script:
         - yarn semantic-release
