@@ -193,4 +193,48 @@ module.exports = {
         process.kill(process.pid, 'SIGTERM');
       });
   },
+  kill(test) {
+    test.expect(2);
+
+    test.throws(() => Adios.master.kill(999999));
+
+    class DummyWorker extends EventEmitter {
+      constructor() {
+        super();
+        this.process = { pid: 1 };
+        EventEmitter.call(this);
+      }
+
+      kill() {
+        test.ok(true, 'Kill called');
+      }
+    }
+    cluster.workers.foo = new DummyWorker();
+    Adios.master.kill(1);
+    test.done();
+  },
+  term(test) {
+    test.expect(2);
+
+    test.throws(() => Adios.master.term(999999));
+
+    class DummyWorker extends EventEmitter {
+      constructor() {
+        super();
+        this.process = { pid: 1 };
+        EventEmitter.call(this);
+      }
+
+      kill() {
+      }
+
+      disconnect() {
+        test.ok(true, 'Kill called');
+        this.emit('disconnect');
+      }
+    }
+    cluster.workers.foo = new DummyWorker();
+    Adios.master.term(1)
+      .then(() => test.done());
+  },
 };

@@ -55,6 +55,15 @@ else {
 
   Returns a promise that resolves when the server is listening.
 
+* `Adios.master.kill(pid)` - Method to kill a worker by process id
+  * `pid` - The process id to kill
+
+* `Adios.master.term(pid)` - Method to terminate a worker by process id, this
+  will call the graceful shutdown defined by the worker.
+  * `pid` - The process id to terminate
+
+  Returns a promise that resolves when the worker is terminated.
+
 * `Adios.child.init(cleanCb[, path])` - The initialize function for adios
   children. Sets up a connection to the master. Note: there can be only one per
   process and it must be running on a child process.

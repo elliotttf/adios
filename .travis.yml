@@ -5,20 +5,40 @@ cache:
     - node_modules
 notifications:
   email: false
-node_js:
-  - '6'
-  - 'node'
-before_install:
-  - npm i -g npm@^2.0.0
-before_script:
-  - npm prune
-script: npm run lint && npm t
-after_success:
-  - npm run coveralls
-  - 'curl -Lo travis_after_all.py https://git.io/travis_after_all'
-  - python travis_after_all.py
-  - export $(cat .to_export_back) &> /dev/null
-  - npm run semantic-release
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
+
+stages:
+  - name: test
+    # require the event type to not be a semantic release tag.
+    if: NOT tag =~ ^v\d+\.\d+\.\d+$
+  - name: release
+    # require the branch name to be one of the environment branches.
+    if: branch = master AND fork = false AND type IN (push, api)
+
+jobs:
+  include:
+    -
+      stage: test
+      node_js: lts/boron 
+      install: npm i
+      script:
+        - yarn lint
+        - yarn test
+      after_success:
+        - yarn coveralls
+    -
+      stage: test
+      node_js: lts/carbon
+      install: npm i
+      script:
+        - yarn lint
+        - yarn test
+      after_success:
+        - yarn coveralls
+    -
+      stage: release
+      node_js: lts/carbon
+      sciprt:
+        - yarn semantic-release
